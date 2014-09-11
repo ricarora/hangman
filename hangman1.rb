@@ -72,6 +72,18 @@ def initialize(word_bag)
   @characters= empty_characters
 end
 
+def make_guess(guessed_letter)
+  @secret.chars.each_with_index do |letter, index|
+    if guessed_letter == letter
+      @characters[index] = letter
+    end
+  end
+end
+
+def guess
+  
+end
+
 def empty_characters
   Array.new(@secret.length, "_")
 end

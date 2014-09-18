@@ -35,19 +35,20 @@ class Board
 # as ASCII
 # This class colloborates with Board GameModel which has the state of the game
 # and with class GameController which calls it to draw
+# attr_accessor :num_bad_guesses
+#
+# def initialize(num_bad_guesses)
+#   # @num_bad_guess = model.num_bad_guesses
+#   @num_bad_guesses = num_bad_guesses
 
-def initialize(model)
-  # @num_bad_guess = model.num_bad_guesses
-  @model = model
 
+# end
 
-end
+# def num_bad_guess
+#   @model.num_bad_guesses
+# end
 
-def num_bad_guess
-  @model.num_bad_guesses
-end
-
-def print_board
+def print_board(num_bad_guess)
   puts "num_bad_guess: #{num_bad_guess}"
 
   @head = "(_)".colorize(:red) #
@@ -59,9 +60,9 @@ def print_board
   @hangman_body_parts = [@head, @torso, @left_arm, @right_arm, @left_leg, @right_leg]
 
   blank_parts = (num_bad_guess..@hangman_body_parts.length).map {|i| " "}
-  puts "blank_parts: #{blank_parts}"
+  #puts "blank_parts: #{blank_parts}"
   filled_parts = (0...num_bad_guess).map {|i| @hangman_body_parts[i]}
-  puts "filled_parts: #{filled_parts}"
+  #puts "filled_parts: #{filled_parts}"
 
   @hangman_body_parts = filled_parts + blank_parts
   @head, @torso, @left_arm, @right_arm, @left_leg, @right_leg = @hangman_body_parts
@@ -95,6 +96,7 @@ class GameModel
     @characters= empty_characters
     @guesses = []
     @bad_char = []
+    @board = Board.new
   end
 
   def make_guess(guessed_letter)
@@ -129,9 +131,9 @@ class GameModel
     unguessed.length == 0
   end
 
-  # def draw
-  #   Board.new(GameModel)
-  # end
+  def draw
+    @board.print_board(num_bad_guesses)
+  end
 
 end
 
@@ -139,8 +141,8 @@ end
 
 def run(word_bag)
   g = GameModel.new(word_bag)
-  h = Board.new(g)
-  h.print_board
+  # h = Board.new(g)
+  #h.print_board
   until g.game_lost || g.game_won
 
 
@@ -151,7 +153,7 @@ def run(word_bag)
     guess = gets.chomp
     #puts g.make_guess(guess)
     g.make_guess(guess)
-    h.print_board
+    g.draw
     #puts g.characters.include?("a")
     puts g.num_bad_guesses
   end
